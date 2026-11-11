@@ -484,7 +484,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         const res = await fetch("/api/info");
         const data = await res.json();
         currentMode = data.mode || "workflow";
-        if (data.provider === "anthropic") {
+        if (data.provider === "deepseek") {
+          document.getElementById("providerText").innerText = "DeepSeek AI Connected 🐳";
+        } else if (data.provider === "anthropic") {
           document.getElementById("providerText").innerText = "Claude AI Connected";
         } else if (data.provider === "gemini") {
           document.getElementById("providerText").innerText = "Gemini AI Connected";

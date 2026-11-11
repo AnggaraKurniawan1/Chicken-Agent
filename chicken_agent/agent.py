@@ -29,9 +29,17 @@ class Agent:
         """Inisialisasi client LLM sesuai API key yang tersedia."""
         anthropic_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
         gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
+        deepseek_key = os.getenv("DEEPSEEK_API_KEY", "").strip()
         openai_key = os.getenv("OPENAI_API_KEY", "").strip()
         openai_base = os.getenv("OPENAI_BASE_URL", "").strip()
+        model_name = os.getenv("CHICKEN_MODEL", "").lower()
 
+        # 1. Prioritas DeepSeek jika DEEPSEEK_API_KEY ada atau URL/model mengarah ke DeepSeek
+        if deepseek_key or "deepseek" in openai_base.lower() or "deepseek" in model_name:
+            self.provider = "deepseek"
+            return
+
+        # 2. Anthropic Claude
         if anthropic_key and anthropic_key != "isi_api_key_kamu_di_sini":
             try:
                 import anthropic
@@ -41,10 +49,12 @@ class Agent:
             except Exception as e:
                 print(f"[warning] Gagal inisialisasi Anthropic client: {e}")
 
+        # 3. Google Gemini
         if gemini_key and gemini_key != "isi_gemini_api_key_di_sini":
             self.provider = "gemini"
             return
 
+        # 4. OpenAI / Generic
         if openai_key or openai_base:
             self.provider = "openai"
             return
@@ -167,10 +177,15 @@ class Agent:
     def _call_openai_compatible(self, user_text: str, on_text=print) -> str:
         """Panggil endpoint OpenAI-compatible (Gemini, Groq, atau local server)."""
         gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
+        deepseek_key = os.getenv("DEEPSEEK_API_KEY", "").strip()
         openai_key = os.getenv("OPENAI_API_KEY", "").strip()
         base_url = os.getenv("OPENAI_BASE_URL", "").strip()
 
-        if self.provider == "gemini":
+        if self.provider == "deepseek":
+            url = f"{base_url.rstrip('/')}/chat/completions" if base_url else "https://api.deepseek.com/v1/chat/completions"
+            api_key = deepseek_key or openai_key
+            model_name = os.getenv("CHICKEN_MODEL", "deepseek-chat")
+        elif self.provider == "gemini":
             url = f"https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
             api_key = gemini_key
             model_name = os.getenv("CHICKEN_MODEL", "gemini-2.5-flash")
