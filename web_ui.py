@@ -425,6 +425,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
 
     <div class="quick-chips">
+      <div class="chip" onclick="sendPrompt('Bagaimana alur pembuatan website dashboard multi-role Admin, User, dan Super Admin dengan Laravel dan Vue.js?')">💻 Dashboard Laravel + Vue.js</div>
       <div class="chip" onclick="sendPrompt('Bagaimana alur pengerjaan pembuatan AI agent dan bot WhatsApp/Telegram?')">🤖 Alur Buat Bot</div>
       <div class="chip" onclick="sendPrompt('Jelaskan alur pengerjaan skripsi IT dari Bab 1 sampai sidang')">🎓 Alur Skripsi IT</div>
       <div class="chip" onclick="sendPrompt('Bagaimana alur manajemen peternakan ayam broiler dan hitung FCR?')">🐔 SOP Ternak Ayam</div>
