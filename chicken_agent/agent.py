@@ -116,19 +116,20 @@ class Agent:
         """Menangani pertanyaan alur pengerjaan, link, atau tool lokal tanpa butuh external LLM API."""
         t = user_text.lower().strip()
 
-        # 1. Cek query alur pengerjaan atau link
+        # 1. Cek query alur pengerjaan atau pembuatan sistem
         k_res = search_knowledge(user_text)
-        is_asking_workflow = any(w in t for w in ["alur", "cara", "langkah", "tahap", "step", "gimana", "proses", "sop"])
-        is_asking_links = any(w in t for w in ["link", "tautan", "url", "referensi", "web", "repo", "github", "portal"])
+        is_asking_workflow = any(w in t for w in [
+            "alur", "cara", "langkah", "tahap", "step", "gimana", "proses", "sop",
+            "ingin membuat", "membuat", "bikin", "membangun", "arsitektur", "dashboard",
+            "laravel", "vue", "super admin", "admin", "role", "sistem"
+        ])
+        is_asking_links = any(w in t for w in ["link", "tautan", "url", "daftar link", "minta link", "cari link"]) and not is_asking_workflow
 
-        if is_asking_workflow and k_res["workflow"]:
+        if (is_asking_workflow or k_res["workflow"]) and k_res["workflow"]:
             return format_workflow_response(k_res["workflow"])
 
         if is_asking_links and k_res["links"]:
             return format_links_response(k_res["links"])
-
-        if k_res["workflow"] and any(w in t for w in ["bot", "skripsi", "ayam", "ternak"]):
-            return format_workflow_response(k_res["workflow"])
 
         # 2. Cek perintah to-do / tasks
         if "tugas" in t or "todo" in t or "to-do" in t:
@@ -219,17 +220,21 @@ class Agent:
     # ----- satu giliran percakapan -----
     def ask(self, user_text: str, on_text=print) -> str:
         """Kirim pesan user, jalankan loop tool / knowledge matcher, kembalikan teks jawaban."""
-        # 1. Prioritaskan Knowledge Router untuk query alur pengerjaan dan link spesifik (bansos-router style)
+        # 1. Prioritaskan Knowledge Router untuk query alur pengerjaan dan solusi pembuatan sistem
         t_low = user_text.lower()
-        if any(w in t_low for w in ["alur", "tahap", "sop", "cara buat bot", "skripsi", "cara pengerjaan"]):
-            k_res = search_knowledge(user_text)
-            if k_res["workflow"]:
-                reply = format_workflow_response(k_res["workflow"])
-                on_text(reply)
-                self.messages.append({"role": "user", "content": user_text})
-                self.messages.append({"role": "assistant", "content": reply})
-                self._save_history()
-                return reply
+        k_res = search_knowledge(user_text)
+        is_workflow_trigger = any(w in t_low for w in [
+            "alur", "tahap", "sop", "cara", "langkah", "ingin membuat", "membuat",
+            "bikin", "rancang", "membangun", "dashboard", "laravel", "vue",
+            "super admin", "admin", "skripsi", "bot", "ayam", "role"
+        ])
+        if k_res["workflow"] and is_workflow_trigger:
+            reply = format_workflow_response(k_res["workflow"])
+            on_text(reply)
+            self.messages.append({"role": "user", "content": user_text})
+            self.messages.append({"role": "assistant", "content": reply})
+            self._save_history()
+            return reply
 
         # 2. Jika provider adalah Anthropic Claude
         if self.provider == "anthropic" and self.client:

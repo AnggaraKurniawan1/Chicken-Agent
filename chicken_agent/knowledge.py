@@ -5,6 +5,51 @@ dan pencarian tautan referensi terpercaya.
 
 # Direktori tautan referensi terpercaya
 LINK_DIRECTORY = [
+    # Laravel & Vue.js Fullstack Ecosystem
+    {
+        "category": "Web Development & Frameworks",
+        "title": "Laravel Official Documentation (v11/v12)",
+        "url": "https://laravel.com/docs",
+        "description": "Dokumentasi resmi framework PHP Laravel: Routing, Middleware, Authentication, Eloquent ORM, dan Events.",
+        "tags": ["laravel", "php", "backend", "framework", "api", "dashboard", "admin"]
+    },
+    {
+        "category": "Web Development & Frameworks",
+        "title": "Vue.js 3 Official Guide & Documentation",
+        "url": "https://vuejs.org/guide/introduction.html",
+        "description": "Panduan resmi Vue 3 Composition API, Reactive State, dan SFC (Single File Components).",
+        "tags": ["vue", "vuejs", "vue3", "frontend", "javascript", "spa", "dashboard"]
+    },
+    {
+        "category": "Web Development & Frameworks",
+        "title": "Inertia.js - The Modern Monolith",
+        "url": "https://inertiajs.com/",
+        "description": "Jembatan penghubung tanpa API rumit antara backend Laravel dan frontend Vue.js.",
+        "tags": ["inertia", "inertiajs", "laravel", "vue", "fullstack", "monolith"]
+    },
+    {
+        "category": "Web Development & Frameworks",
+        "title": "Spatie Laravel Permission (Role & Permissions)",
+        "url": "https://spatie.be/docs/laravel-permission/v6/introduction",
+        "description": "Paket standar industri untuk manajemen Multi-Role (Super Admin, Admin, User) dan hak akses di Laravel.",
+        "tags": ["spatie", "permission", "role", "roles", "super admin", "admin", "rbac", "laravel"]
+    },
+    {
+        "category": "Web Development & Frameworks",
+        "title": "Laravel Reverb (Realtime WebSocket Server)",
+        "url": "https://laravel.com/docs/reverb",
+        "description": "Server WebSocket bawaan Laravel berkecepatan tinggi untuk notifikasi realtime antar user dan admin.",
+        "tags": ["reverb", "websocket", "realtime", "notifikasi", "broadcast", "laravel", "terhubung"]
+    },
+    {
+        "category": "Web Development & Frameworks",
+        "title": "Tailwind CSS Documentation",
+        "url": "https://tailwindcss.com/docs",
+        "description": "Framework CSS utility-first untuk membangun antarmuka dashboard admin yang modern dan responsif.",
+        "tags": ["tailwind", "css", "ui", "dashboard", "styling"]
+    },
+
+    # WhatsApp & Chatbot
     {
         "category": "WhatsApp & Chatbot Infrastructure",
         "title": "Baileys WhatsApp Web API (GitHub)",
@@ -26,13 +71,8 @@ LINK_DIRECTORY = [
         "description": "Panduan resmi pembuatan bot Telegram dan mendapatkan token BotFather.",
         "tags": ["telegram", "botfather", "bot", "token"]
     },
-    {
-        "category": "AI Models & API Consoles",
-        "title": "Anthropic Claude Console",
-        "url": "https://console.anthropic.com/",
-        "description": "Portal API Key resmi untuk model Claude (Sonnet, Opus, Haiku).",
-        "tags": ["anthropic", "claude", "api key", "ai", "token"]
-    },
+
+    # AI Models & API
     {
         "category": "AI Models & API Consoles",
         "title": "Google AI Studio (Gemini API)",
@@ -42,16 +82,25 @@ LINK_DIRECTORY = [
     },
     {
         "category": "AI Models & API Consoles",
+        "title": "Anthropic Claude Console",
+        "url": "https://console.anthropic.com/",
+        "description": "Portal API Key resmi untuk model Claude (Sonnet, Opus, Haiku).",
+        "tags": ["anthropic", "claude", "api key", "ai", "token"]
+    },
+    {
+        "category": "AI Models & API Consoles",
         "title": "Groq Cloud Console (Ultra Fast LLM)",
         "url": "https://console.groq.com/",
         "description": "API inference berkecepatan tinggi gratis untuk Llama 3, Mixtral, dan DeepSeek.",
         "tags": ["groq", "llama", "fast", "api", "gratis"]
     },
+
+    # Deploy & Hosting
     {
         "category": "Deploy & Hosting",
         "title": "Railway Deployment Platform",
         "url": "https://railway.com/",
-        "description": "Platform hosting cloud instan untuk menjalankan Node.js / Python bot 24/7.",
+        "description": "Platform hosting cloud instan untuk menjalankan Node.js / Python / Laravel bot 24/7.",
         "tags": ["deploy", "hosting", "cloud", "railway", "server"]
     },
     {
@@ -61,6 +110,8 @@ LINK_DIRECTORY = [
         "description": "Hosting gratis/murah untuk web service, bot, dan background workers.",
         "tags": ["deploy", "hosting", "render", "docker"]
     },
+
+    # Riset & Tugas Akhir IT
     {
         "category": "Riset & Tugas Akhir IT",
         "title": "Google Scholar (Pencarian Jurnal Ilmiah)",
@@ -70,18 +121,20 @@ LINK_DIRECTORY = [
     },
     {
         "category": "Riset & Tugas Akhir IT",
-        "title": "Hugging Face Models & Datasets",
-        "url": "https://huggingface.co/",
-        "description": "Gudang model open-source machine learning, NLP, computer vision, dan dataset penelitian.",
-        "tags": ["dataset", "machine learning", "ai", "model", "nlp", "cnn", "huggingface"]
-    },
-    {
-        "category": "Riset & Tugas Akhir IT",
         "title": "Kaggle Datasets & Notebooks",
         "url": "https://www.kaggle.com/datasets",
         "description": "Koleksi dataset publik untuk eksperimen machine learning, klasifikasi, dan prediksi.",
         "tags": ["kaggle", "dataset", "data", "ml", "python"]
     },
+    {
+        "category": "Riset & Tugas Akhir IT",
+        "title": "Hugging Face Models & Datasets",
+        "url": "https://huggingface.co/",
+        "description": "Gudang model open-source machine learning, NLP, computer vision, dan dataset penelitian.",
+        "tags": ["dataset", "machine learning", "ai", "model", "nlp", "cnn", "huggingface"]
+    },
+
+    # Peternakan
     {
         "category": "Peternakan & Smart Farming",
         "title": "FAO Poultry Production Guide",
@@ -93,6 +146,111 @@ LINK_DIRECTORY = [
 
 # Database Alur Pengerjaan Lengkap
 WORKFLOWS = {
+    "laravel-vue-dashboard": {
+        "id": "laravel-vue-dashboard",
+        "title": "Alur Pengerjaan Website Dashboard Multi-Role (Super Admin, Admin, User) Laravel + Vue.js",
+        "summary": "Panduan arsitektur dan langkah teknis membangun dashboard terintegrasi dengan Role-Based Access Control (RBAC), Inertia.js, dan komunikasi data antar-role.",
+        "steps": [
+            {
+                "step": 1,
+                "title": "Pemilihan Arsitektur & Stack (Inertia.js vs REST API)",
+                "details": (
+                    "- **Pilihan Utama (Direkomendasikan): Laravel 11 + Vue 3 + Inertia.js**.\n"
+                    "  Menggunakan starter kit `Laravel Breeze` dengan opsi `--vue`. Inertia menghilangkan kebutuhan membuat API REST terpisah, routing langsung diarahkan dari Laravel controller ke komponen Vue.\n"
+                    "- **Pilihan Alternatif: Laravel REST API + Vue 3 SPA (Vite + Pinia)**.\n"
+                    "  Menggunakan Laravel Sanctum untuk autentikasi token Bearer dan Vue Router untuk navigasi frontend."
+                ),
+                "tips": "Untuk dashboard admin internal, gunakan stack Laravel + Inertia.js + Vue 3 karena proses development 3x lebih cepat tanpa pusing mengelola token di localStorage."
+            },
+            {
+                "step": 2,
+                "title": "Desain Database & Hak Akses (RBAC) dengan Spatie Permission",
+                "details": (
+                    "- Install paket manajemen role standar industri:\n"
+                    "  `composer require spatie/laravel-permission`\n"
+                    "- Buat 3 Role Utama di Seeder (`RoleSeeder.php`):\n"
+                    "  1. `super_admin`: Hak akses mutlak (kelola Admin, kelola role, konfigurasi sistem, audit trail).\n"
+                    "  2. `admin`: Hak akses operasional (verifikasi data user, input master data, kelola transaksi).\n"
+                    "  3. `user`: Hak akses mandiri (input data pribadi, ajukan permohonan, lihat status dashboard sendiri).\n"
+                    "- Terapkan relasi `HasRoles` trait pada model `App\\Models\\User`."
+                ),
+                "tips": "Gunakan seeder dengan `Role::firstOrCreate(['name' => 'super_admin'])` agar data awal otomatis terisi saat `php artisan migrate --seed`."
+            },
+            {
+                "step": 3,
+                "title": "Pembuatan Middleware & Proteksi Route di Laravel",
+                "details": (
+                    "- Buat route grouping di `routes/web.php` berdasarkan role:\n"
+                    "  ```php\n"
+                    "  Route::middleware(['auth', 'role:super_admin'])->prefix('super-admin')->group(function () {\n"
+                    "      Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');\n"
+                    "      Route::resource('/manage-admins', AdminManagementController::class);\n"
+                    "  });\n"
+                    "  Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->group(function () {\n"
+                    "      Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');\n"
+                    "      Route::get('/users-list', [AdminController::class, 'users']);\n"
+                    "  });\n"
+                    "  Route::middleware(['auth', 'role:user'])->prefix('user')->group(function () {\n"
+                    "      Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');\n"
+                    "  });\n"
+                    "  ```"
+                ),
+                "tips": "Pastikan middleware `'role' => \\Spatie\\Permission\\Middleware\\RoleMiddleware::class` didaftarkan di `bootstrap/app.php` (Laravel 11)."
+            },
+            {
+                "step": 4,
+                "title": "Perancangan Antarmuka Vue 3 & Sidebar Dinamis per Role",
+                "details": (
+                    "- Di middleware `HandleInertiaRequests.php`, bagikan data user beserta rolenya ke semua komponen Vue:\n"
+                    "  ```php\n"
+                    "  'auth' => [\n"
+                    "      'user' => $request->user() ? array_merge($request->user()->toArray(), [\n"
+                    "          'roles' => $request->user()->getRoleNames(),\n"
+                    "          'permissions' => $request->user()->getAllPermissions()->pluck('name')\n"
+                    "      ]) : null\n"
+                    "  ]\n"
+                    "  ```\n"
+                    "- Di komponen Vue (`Sidebar.vue`), render menu secara kondisional:\n"
+                    "  - Jika role memuat `super_admin`: tampilkan menu Master Admin, Log Aktivitas, Pengaturan Server.\n"
+                    "  - Jika role memuat `admin`: tampilkan menu Validasi User, Laporan Rekap, Monitoring Harian.\n"
+                    "  - Jika role memuat `user`: tampilkan menu Profil Saya, Pengajuan Permohonan, Riwayat Transaksi."
+                ),
+                "tips": "Buat helper function di Vue: `const hasRole = (role) => $page.props.auth.user.roles.includes(role)`."
+            },
+            {
+                "step": 5,
+                "title": "Mekanisme Saling Terhubung Antar-Role (Interkoneksi & Realtime)",
+                "details": (
+                    "Agar Super Admin, Admin, dan User **saling terhubung secara real-time**:\n"
+                    "1. **Alur Notifikasi & Approval:**\n"
+                    "   - User submit pengajuan/data -> Laravel Trigger Event `NewUserSubmission`.\n"
+                    "   - Admin menerima notifikasi realtime dan tombol aksi 'Approve' / 'Reject'.\n"
+                    "   - Hasil approval Admin otomatis memicu notifikasi balik ke Dashboard User.\n"
+                    "   - Super Admin dapat memantau seluruh riwayat aksi (siapa yang menyetujui, jam berapa) di Audit Log.\n"
+                    "2. **Teknologi Realtime:** Gunakan **Laravel Reverb** (bawaan Laravel 11) atau **Pusher** + **Laravel Echo** di Vue 3."
+                ),
+                "tips": "Kombinasikan Event Broadcasting dengan database notification table (`php artisan make:notification`) agar notifikasi tetap tersimpan saat pengguna offline."
+            },
+            {
+                "step": 6,
+                "title": "Pengujian Hak Akses, Keamanan & Deployment",
+                "details": (
+                    "- Uji coba skenario bypass URL: pastikan User biasa tidak bisa membuka `/admin/dashboard` (harus return 403 Forbidden).\n"
+                    "- Pasang policy authorization pada controller (`$this->authorize(...)`) selain middleware route.\n"
+                    "- Build asset frontend sebelum deploy: `npm run build`.\n"
+                    "- Siapkan environment production: `php artisan config:cache`, `php artisan route:cache`, `php artisan view:cache`."
+                ),
+                "tips": "Gunakan database transaction `DB::transaction()` saat Super Admin membuat atau memutasi akun Admin dan User."
+            }
+        ],
+        "links": [
+            {"title": "Laravel 11 Documentation", "url": "https://laravel.com/docs"},
+            {"title": "Vue.js 3 Composition API", "url": "https://vuejs.org/guide/introduction.html"},
+            {"title": "Inertia.js Documentation", "url": "https://inertiajs.com/"},
+            {"title": "Spatie Laravel Permission", "url": "https://spatie.be/docs/laravel-permission/v6/introduction"},
+            {"title": "Laravel Reverb (WebSockets)", "url": "https://laravel.com/docs/reverb"}
+        ]
+    },
     "buat-agent-bot": {
         "id": "buat-agent-bot",
         "title": "Alur Pengerjaan Pembuatan AI Agent & Bot (WhatsApp / Telegram / Web)",
@@ -286,35 +444,60 @@ def search_knowledge(query: str) -> dict:
     q = query.lower().strip()
     words = [w for w in q.split() if len(w) > 2]
 
-    # 1. Cek pencocokan workflow
+    # Cek kecocokan tema spesifik dengan bobot tinggi
     matched_workflows = []
+
+    # 1. Laravel, Vue, Dashboard, PHP, Web Admin Multi-Role
+    is_laravel_vue = any(k in q for k in ["laravel", "vue", "dashboard", "admin", "super admin", "rbac", "multi role", "php"])
+    if is_laravel_vue:
+        matched_workflows.append((20, WORKFLOWS["laravel-vue-dashboard"]))
+
+    # 2. Bot WA / Telegram / Agent
+    if any(k in q for k in ["bot", "agent", "wa", "telegram", "baileys", "whatsapp"]):
+        matched_workflows.append((18, WORKFLOWS["buat-agent-bot"]))
+
+    # 3. Skripsi IT / AI / Machine Learning
+    if any(k in q for k in ["skripsi", "tugas akhir", "sidang", "jurnal", "riset", "koding", "dataset"]):
+        matched_workflows.append((18, WORKFLOWS["skripsi-it-ai"]))
+
+    # 4. Peternakan Ayam
+    if any(k in q for k in ["ayam", "ternak", "broiler", "layer", "kandang", "doc", "fcr"]):
+        matched_workflows.append((18, WORKFLOWS["manajemen-peternakan-ayam"]))
+
+    # 5. Generic scoring terhadap text corpus
     for wf_id, wf in WORKFLOWS.items():
+        if any(w[1]["id"] == wf_id for w in matched_workflows):
+            continue
         score = 0
         text_corpus = (wf["title"] + " " + wf["summary"] + " " + wf_id).lower()
         for w in words:
             if w in text_corpus:
-                score += 1
-        if score > 0 or any(kw in q for kw in ["alur", "langkah", "cara", "tahap", "step", "proses", "sop"]):
-            # Cek kecocokan tema spesifik
-            if ("bot" in q or "agent" in q or "wa" in q or "telegram" in q) and wf_id == "buat-agent-bot":
-                matched_workflows.append((10, wf))
-            elif ("skripsi" in q or "tugas akhir" in q or "sidang" in q or "koding" in q or "riset" in q) and wf_id == "skripsi-it-ai":
-                matched_workflows.append((10, wf))
-            elif ("ayam" in q or "ternak" in q or "broiler" in q or "kandang" in q or "doc" in q or "fcr" in q) and wf_id == "manajemen-peternakan-ayam":
-                matched_workflows.append((10, wf))
-            elif score > 0:
-                matched_workflows.append((score, wf))
+                score += 2
+        if score > 0:
+            matched_workflows.append((score, wf))
 
     matched_workflows.sort(key=lambda x: x[0], reverse=True)
 
-    # 2. Cek pencocokan tautan (links)
+    # 6. Pencocokan tautan (links) secara tepat
     matched_links = []
     for item in LINK_DIRECTORY:
         score = 0
-        tag_str = " ".join(item["tags"])
+        tag_str = " ".join(item["tags"]).lower()
+        title_str = item["title"].lower()
+        desc_str = item["description"].lower()
+
+        # Prioritaskan jika kata spesifik cocok
         for w in words:
-            if w in tag_str or w in item["title"].lower() or w in item["description"].lower():
+            # Hindari kata umum seperti 'dan', 'ini', 'web', 'dengan' yang memicu false positive
+            if w in ["web", "dan", "yang", "untuk", "bisa", "dengan", "ingin", "buat", "saya", "pada", "saat"]:
+                continue
+            if w in tag_str:
+                score += 3
+            if w in title_str:
+                score += 4
+            if w in desc_str:
                 score += 1
+
         if score > 0:
             matched_links.append((score, item))
 
