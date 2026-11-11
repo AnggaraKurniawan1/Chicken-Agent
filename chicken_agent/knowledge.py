@@ -74,6 +74,20 @@ LINK_DIRECTORY = [
 
     # AI Models & API
     {
+        "category": "AI Frameworks & Harness",
+        "title": "DeepSeek Harness (GitHub)",
+        "url": "https://github.com/deepseek-ai/deepseek-harness",
+        "description": "Framework harness agent open-source resmi DeepSeek dengan arsitektur 'Everything is a Plugin' dan Web UI.",
+        "tags": ["deepseek", "harness", "dsh", "deepseek-harness", "agent", "cordis", "plugin"]
+    },
+    {
+        "category": "AI Models & API Consoles",
+        "title": "DeepSeek Open Platform (API Key)",
+        "url": "https://platform.deepseek.com/",
+        "description": "Portal API resmi DeepSeek untuk mengakses model DeepSeek-V3 dan DeepSeek-R1 (OpenAI-compatible).",
+        "tags": ["deepseek", "deepseek-v3", "deepseek-r1", "api key", "ai", "llm"]
+    },
+    {
         "category": "AI Models & API Consoles",
         "title": "Google AI Studio (Gemini API)",
         "url": "https://aistudio.google.com/",
