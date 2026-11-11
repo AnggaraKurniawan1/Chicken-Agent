@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 from .config import DATA_DIR, WORKSPACE_DIR
+from .knowledge import format_links_response, format_workflow_response, search_knowledge
 
 TASKS_FILE = DATA_DIR / "tasks.json"
 NOTES_FILE = DATA_DIR / "notes.json"
@@ -123,6 +124,22 @@ def run_python(path: str, timeout: int = 30) -> str:
     return f"exit code {r.returncode}\n{out[:8000]}"
 
 
+def get_workflow(topic: str) -> str:
+    """Ambil alur pengerjaan dan panduan detail berdasarkan topik (misal: bot, skripsi, ternak)."""
+    res = search_knowledge(topic)
+    if res["workflow"]:
+        return format_workflow_response(res["workflow"])
+    return f"Alur pengerjaan untuk '{topic}' belum terdaftar secara spesifik. Cobalah kata kunci: 'bot', 'skripsi', atau 'ternak ayam'."
+
+
+def search_links(query: str) -> str:
+    """Cari tautan, repositori referensi, dan dokumentasi terkait topik."""
+    res = search_knowledge(query)
+    if res["links"]:
+        return format_links_response(res["links"])
+    return f"Tidak ditemukan tautan spesifik untuk kata kunci '{query}'."
+
+
 # ---------- registry ----------
 def _schema(name, desc, props=None, required=None):
     return {
@@ -151,6 +168,10 @@ TOOLS = {
                            {"path": S, "content": S}, ["path", "content"]), write_file),
     "run_python": (_schema("run_python", "Jalankan file Python di workspace (butuh konfirmasi user).",
                            {"path": S, "timeout": {"type": "integer"}}, ["path"]), run_python),
+    "get_workflow": (_schema("get_workflow", "Ambil panduan alur pengerjaan terperinci langkah demi langkah untuk topik tertentu.",
+                             {"topic": S}, ["topic"]), get_workflow),
+    "search_links": (_schema("search_links", "Cari direktori tautan dan link dokumentasi/repositori penting.",
+                             {"query": S}, ["query"]), search_links),
 }
 
 # Tool yang dieksekusi server Anthropic (tidak perlu kode lokal)

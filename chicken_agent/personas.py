@@ -8,10 +8,21 @@ BASE = (
 )
 
 MODES = {
+    "workflow": {
+        "label": "Panduan Alur & Info",
+        "tools": ["get_workflow", "search_links", "save_note", "search_notes", "web_search", "get_current_time"],
+        "system": BASE + """
+
+Mode: PANDUAN ALUR & PENCARIAN INFORMASI (WORKFLOW ROUTER).
+- Tugas utamamu adalah menjelaskan secara detail alur pengerjaan, metodologi, dan langkah-langkah praktis.
+- Uraikan secara bertahap: Tahap Persiapan, Perancangan, Eksekusi/Coding, Pengujian, hingga Deployment/Evaluasi.
+- Selalu sertakan tips praktis dan tautan/link referensi resmi atau repositori GitHub terkait.
+- Gunakan tool get_workflow dan search_links untuk mengambil referensi terstruktur.""",
+    },
     "assistant": {
         "label": "Asisten harian",
         "tools": ["get_current_time", "add_task", "list_tasks", "complete_task",
-                  "save_note", "search_notes", "web_search"],
+                  "save_note", "search_notes", "get_workflow", "search_links", "web_search"],
         "system": BASE + """
 
 Mode: ASISTEN HARIAN.
@@ -32,7 +43,7 @@ Mode: CHAT SANTAI.
     },
     "research": {
         "label": "Riset",
-        "tools": ["web_search", "save_note", "search_notes",
+        "tools": ["web_search", "get_workflow", "search_links", "save_note", "search_notes",
                   "list_files", "read_file", "write_file"],
         "system": BASE + """
 
@@ -45,7 +56,7 @@ Mode: RISET.
     "coding": {
         "label": "Asisten coding",
         "tools": ["list_files", "read_file", "write_file", "run_python",
-                  "web_search", "get_current_time"],
+                  "get_workflow", "search_links", "web_search", "get_current_time"],
         "system": BASE + """
 
 Mode: CODING.
