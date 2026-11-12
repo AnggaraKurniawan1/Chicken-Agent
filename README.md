@@ -12,12 +12,16 @@ Agent cerdas berbasis Python dengan fitur **Panduan Alur Pengerjaan (Workflow En
   - SOP Manajemen Peternakan Ayam (Broiler & Layer, FCR, pakan, biosecurity, vaksinasi).
 - **🔗 Direktori Tautan & Link Finder:**
   - Pencarian repositori GitHub, dokumentasi API, portal jurnal ilmiah (Google Scholar), dan platform AI gratis.
-- **🖥️ Antarmuka Ganda (Web UI & CLI):**
+- **🖥️ Antarmuka Ganda (Web UI, EnvKit & CLI):**
+  - **EnvKit Integration:** Bisa diakses langsung melalui domain lokal **`http://chicken-agent.test`** (port `5173`).
   - **Web Dashboard:** Antarmuka web interaktif di browser (cukup jalankan `start_web.bat` atau `python main.py --web`).
   - **Terminal CLI:** Chat konsol interaktif cepat (`start_cli.bat` atau `python main.py`).
 - **🛡️ Multi-Provider & Akses Mandiri (Bisa Diakses Tanpa API Key):**
   - Jika belum memiliki API key, agen tetap **100% dapat diakses** untuk konsultasi alur kerja, SOP, pencarian link, dan manajemen tugas/catatan lokal!
-  - Mendukung **Anthropic Claude**, **Google Gemini** (gratis di AI Studio), atau **OpenAI/Groq**.
+  - Mendukung **DeepSeek** (`deepseek-chat`, `deepseek-reasoner`), **Google Gemini** (gratis di AI Studio), **Anthropic Claude**, atau gateway lokal **Bansos-Router**.
+- **🔌 REST API & OpenAI-Compatible Gateway:**
+  - Endpoint `/api/chat` untuk integrasi REST standar.
+  - Endpoint `/v1/chat/completions` (OpenAI format) untuk dihubungkan ke framework frontend (Vue.js, React), backend (Laravel), atau mobile app.
 
 ---
 

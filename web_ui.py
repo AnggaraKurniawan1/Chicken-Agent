@@ -5,6 +5,7 @@ import json
 import os
 import sys
 import threading
+import time
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
@@ -606,15 +607,27 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 
 class AgentHttpHandler(BaseHTTPRequestHandler):
+    def _send_cors_headers(self):
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self._send_cors_headers()
+        self.end_headers()
+
     def do_GET(self):
         url = urlparse(self.path)
         if url.path == "/" or url.path == "/index.html":
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
             self.wfile.write(HTML_TEMPLATE.encode("utf-8"))
         elif url.path == "/api/info":
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             data = {
@@ -623,8 +636,23 @@ class AgentHttpHandler(BaseHTTPRequestHandler):
                 "modes": {k: v["label"] for k, v in MODES.items()}
             }
             self.wfile.write(json.dumps(data).encode("utf-8"))
+        elif url.path in ("/v1/models", "/api/models"):
+            self.send_response(200)
+            self._send_cors_headers()
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            data = {
+                "object": "list",
+                "data": [
+                    {"id": "chicken-agent", "object": "model", "owned_by": "user"},
+                    {"id": "workflow", "object": "model", "owned_by": "chicken-agent"},
+                    {"id": "assistant", "object": "model", "owned_by": "chicken-agent"}
+                ]
+            }
+            self.wfile.write(json.dumps(data).encode("utf-8"))
         else:
             self.send_response(404)
+            self._send_cors_headers()
             self.end_headers()
 
     def do_POST(self):
@@ -648,9 +676,57 @@ class AgentHttpHandler(BaseHTTPRequestHandler):
             reply = agent.ask(msg, on_text=lambda *a, **kw: None)
 
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.end_headers()
             self.wfile.write(json.dumps({"reply": reply, "mode": agent.mode}).encode("utf-8"))
+
+        elif url.path in ("/v1/chat/completions", "/api/v1/chat/completions"):
+            # Standar OpenAI-compatible endpoint
+            messages = payload.get("messages", [])
+            user_msg = ""
+            for m in reversed(messages):
+                if isinstance(m, dict) and m.get("role") == "user":
+                    user_msg = m.get("content", "")
+                    break
+            if not user_msg and messages and isinstance(messages[-1], dict):
+                user_msg = messages[-1].get("content", "")
+
+            req_model = payload.get("model", "")
+            if req_model in MODES:
+                try:
+                    agent.set_mode(req_model)
+                except Exception:
+                    pass
+
+            reply = agent.ask(user_msg, on_text=lambda *a, **kw: None)
+            now = int(time.time())
+            res = {
+                "id": f"chatcmpl-chicken-{now}",
+                "object": "chat.completion",
+                "created": now,
+                "model": agent.mode,
+                "choices": [
+                    {
+                        "index": 0,
+                        "message": {
+                            "role": "assistant",
+                            "content": reply
+                        },
+                        "finish_reason": "stop"
+                    }
+                ],
+                "usage": {
+                    "prompt_tokens": len(user_msg.split()),
+                    "completion_tokens": len(reply.split()),
+                    "total_tokens": len(user_msg.split()) + len(reply.split())
+                }
+            }
+            self.send_response(200)
+            self._send_cors_headers()
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(json.dumps(res).encode("utf-8"))
 
         elif url.path == "/api/mode":
             mode = payload.get("mode", "workflow")
@@ -661,6 +737,7 @@ class AgentHttpHandler(BaseHTTPRequestHandler):
                 res = {"status": "error", "message": str(e)}
 
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps(res).encode("utf-8"))
@@ -668,12 +745,14 @@ class AgentHttpHandler(BaseHTTPRequestHandler):
         elif url.path == "/api/reset":
             agent.reset()
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps({"status": "ok"}).encode("utf-8"))
 
         else:
             self.send_response(404)
+            self._send_cors_headers()
             self.end_headers()
 
     def log_message(self, format, *args):
@@ -681,11 +760,13 @@ class AgentHttpHandler(BaseHTTPRequestHandler):
         pass
 
 
-def run_web(port: int = 5050, auto_open: bool = True):
+def run_web(port: int = 5173, auto_open: bool = True):
     server = ThreadingHTTPServer(("127.0.0.1", port), AgentHttpHandler)
     url = f"http://127.0.0.1:{port}"
     print(f"\n=======================================================")
-    print(f"🚀 Chicken-Agent Web UI aktif di: {url}")
+    print(f"🚀 Chicken-Agent Web UI aktif!")
+    print(f"   EnvKit URL : http://chicken-agent.test")
+    print(f"   Local URL  : {url}")
     print(f"   Mode: {agent.mode} | Provider: {agent.provider}")
     print(f"   Tekan Ctrl+C di terminal ini untuk berhenti.")
     print(f"=======================================================\n")
@@ -701,5 +782,9 @@ def run_web(port: int = 5050, auto_open: bool = True):
 
 
 if __name__ == "__main__":
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 5050
-    run_web(port=port)
+    port = int(os.getenv("PORT", "5173"))
+    auto_open = "--no-browser" not in sys.argv
+    for arg in sys.argv[1:]:
+        if arg.isdigit():
+            port = int(arg)
+    run_web(port=port, auto_open=auto_open)

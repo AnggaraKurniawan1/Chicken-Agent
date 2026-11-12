@@ -1,0 +1,11 @@
+{
+  "name": "chicken-agent",
+  "version": "1.0.0",
+  "description": "Chicken-Agent AI Assistant & Workflow Router",
+  "scripts": {
+    "dev": "python web_ui.py 5173",
+    "start": "python web_ui.py 5173",
+    "web": "python web_ui.py 5173",
+    "cli": "python main.py"
+  }
+}

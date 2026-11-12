@@ -1,0 +1,21 @@
+{
+  "schema": 3,
+  "dev_server": {
+    "enabled": true,
+    "port": 5173
+  },
+  "tasks": {
+    "web": {
+      "commands": [
+        "python web_ui.py 5173"
+      ],
+      "description": "Start Chicken-Agent Web UI (Port 5173)"
+    },
+    "cli": {
+      "commands": [
+        "python main.py"
+      ],
+      "description": "Start Chicken-Agent CLI"
+    }
+  }
+}
