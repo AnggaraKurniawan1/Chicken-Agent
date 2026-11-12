@@ -22,7 +22,13 @@ DATA_DIR.mkdir(exist_ok=True)
 WORKSPACE_DIR.mkdir(exist_ok=True)
 
 # Default model
-MODEL = os.getenv("CHICKEN_MODEL", "claude-3-5-sonnet-20241022")
+MODEL = os.getenv("CHICKEN_MODEL", "deepseek-chat")
 MAX_TOKENS = int(os.getenv("CHICKEN_MAX_TOKENS", "4096"))
 MAX_TOOL_ROUNDS = 12     # batas putaran tool per satu pesan user
 MAX_HISTORY_TURNS = 40   # jumlah pesan teks yang disimpan antar sesi
+
+# Cloud Integrations (Render & Supabase)
+RENDER_API_KEY = os.getenv("RENDER_API_KEY", "")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
+SUPABASE_ACCESS_TOKEN = os.getenv("SUPABASE_ACCESS_TOKEN", "")

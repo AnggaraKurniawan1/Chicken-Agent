@@ -119,10 +119,17 @@ LINK_DIRECTORY = [
     },
     {
         "category": "Deploy & Hosting",
-        "title": "Render Cloud Application Hosting",
-        "url": "https://render.com/",
-        "description": "Hosting gratis/murah untuk web service, bot, dan background workers.",
-        "tags": ["deploy", "hosting", "render", "docker"]
+        "title": "Render Cloud Dashboard & Settings",
+        "url": "http://dashboard.render.com/u/usr-db7osbe7bikc73bl2nfg/settings",
+        "description": "Pengaturan akun, API Keys, dan deployment hosting cloud di Render.",
+        "tags": ["deploy", "hosting", "render", "docker", "api key", "settings"]
+    },
+    {
+        "category": "Database & Cloud Backend",
+        "title": "Supabase Cloud Platform",
+        "url": "https://supabase.com/dashboard",
+        "description": "Platform Backend-as-a-Service open-source dengan PostgreSQL, Auth, Edge Functions, dan Realtime API.",
+        "tags": ["supabase", "database", "postgres", "auth", "backend", "api"]
     },
 
     # Riset & Tugas Akhir IT

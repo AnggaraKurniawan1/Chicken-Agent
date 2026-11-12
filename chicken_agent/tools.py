@@ -140,6 +140,51 @@ def search_links(query: str) -> str:
     return f"Tidak ditemukan tautan spesifik untuk kata kunci '{query}'."
 
 
+def check_render_status() -> str:
+    """Cek status akun dan layanan Render menggunakan RENDER_API_KEY."""
+    from .config import RENDER_API_KEY
+    if not RENDER_API_KEY:
+        return "RENDER_API_KEY belum dikonfigurasi di file .env."
+    try:
+        import requests
+        headers = {"Authorization": f"Bearer {RENDER_API_KEY}", "Accept": "application/json"}
+        r = requests.get("https://api.render.com/v1/services?limit=10", headers=headers, timeout=10)
+        if r.status_code == 200:
+            services = r.json()
+            if not services:
+                return "Koneksi ke Render API sukses! Akun aktif (Belum ada service yang berjalan)."
+            out = f"Koneksi ke Render API sukses! Ditemukan {len(services)} service:\n"
+            for s in services:
+                svc = s.get("service", {})
+                out += f"- {svc.get('name')} ({svc.get('type')}) - Status: {svc.get('suspended')}\n"
+            return out
+        return f"Render API Error ({r.status_code}): {r.text}"
+    except Exception as e:
+        return f"Gagal menghubungi Render API: {e}"
+
+
+def check_supabase_status() -> str:
+    """Cek status akun dan project Supabase menggunakan SUPABASE_ACCESS_TOKEN."""
+    from .config import SUPABASE_ACCESS_TOKEN
+    if not SUPABASE_ACCESS_TOKEN:
+        return "SUPABASE_ACCESS_TOKEN belum dikonfigurasi di file .env."
+    try:
+        import requests
+        headers = {"Authorization": f"Bearer {SUPABASE_ACCESS_TOKEN}", "Accept": "application/json"}
+        r = requests.get("https://api.supabase.com/v1/projects", headers=headers, timeout=10)
+        if r.status_code == 200:
+            projects = r.json()
+            if not projects:
+                return "Koneksi ke Supabase API sukses! Token valid (Belum ada project aktif)."
+            out = f"Koneksi ke Supabase API sukses! Ditemukan {len(projects)} project:\n"
+            for p in projects:
+                out += f"- {p.get('name')} (ID: {p.get('id')}) - Region: {p.get('region')} - Status: {p.get('status')}\n"
+            return out
+        return f"Supabase API Error ({r.status_code}): {r.text}"
+    except Exception as e:
+        return f"Gagal menghubungi Supabase API: {e}"
+
+
 # ---------- registry ----------
 def _schema(name, desc, props=None, required=None):
     return {
@@ -172,6 +217,8 @@ TOOLS = {
                              {"topic": S}, ["topic"]), get_workflow),
     "search_links": (_schema("search_links", "Cari direktori tautan dan link dokumentasi/repositori penting.",
                              {"query": S}, ["query"]), search_links),
+    "check_render_status": (_schema("check_render_status", "Cek koneksi dan status akun hosting Render."), check_render_status),
+    "check_supabase_status": (_schema("check_supabase_status", "Cek koneksi dan project database Supabase."), check_supabase_status),
 }
 
 # Tool yang dieksekusi server Anthropic (tidak perlu kode lokal)

@@ -761,7 +761,24 @@ class AgentHttpHandler(BaseHTTPRequestHandler):
 
 
 def run_web(port: int = 5173, auto_open: bool = True):
-    server = ThreadingHTTPServer(("127.0.0.1", port), AgentHttpHandler)
+    ThreadingHTTPServer.allow_reuse_address = True
+    try:
+        server = ThreadingHTTPServer(("127.0.0.1", port), AgentHttpHandler)
+    except OSError as e:
+        if getattr(e, "winerror", None) == 10048 or "10048" in str(e):
+            print(f"\n=======================================================")
+            print(f"🚀 Chicken-Agent sudah aktif di port {port}!")
+            print(f"   EnvKit URL : http://chicken-agent.test")
+            print(f"   Local URL  : http://127.0.0.1:{port}")
+            print(f"   Menjaga dev-server EnvKit tetap berjalan...")
+            print(f"=======================================================\n")
+            try:
+                while True:
+                    time.sleep(5)
+            except KeyboardInterrupt:
+                return
+        raise
+
     url = f"http://127.0.0.1:{port}"
     print(f"\n=======================================================")
     print(f"🚀 Chicken-Agent Web UI aktif!")
