@@ -1,4 +1,16 @@
 <?php
+// Auto-start trigger langsung dari browser
+if (isset($_GET['start_server'])) {
+    $python = 'C:\\ProgramData\\envkit\\services\\python\\3.14.6\\python.exe';
+    if (!file_exists($python)) $python = 'python';
+    $script = __DIR__ . '\\web_ui.py';
+    $cmd = 'start "" /B "' . $python . '" "' . $script . '" 5173 --no-browser';
+    pclose(popen("cmd /c " . $cmd, "r"));
+    sleep(1);
+    header("Location: /");
+    exit;
+}
+
 // Reverse proxy ke server Python Chicken-Agent (Port 5173)
 $target = 'http://127.0.0.1:5173' . $_SERVER['REQUEST_URI'];
 
@@ -44,6 +56,8 @@ if ($response === false) {
         p { color: #94a3b8; line-height: 1.6; font-size: 1rem; }
         code { background: #0f172a; padding: 0.2rem 0.5rem; border-radius: 6px; color: #38bdf8; font-family: monospace; }
         .status-badge { display: inline-block; padding: 0.35rem 0.8rem; background: #ef444422; color: #ef4444; border: 1px solid #ef444455; border-radius: 9999px; font-weight: 600; font-size: 0.85rem; margin-bottom: 1rem; }
+        .btn-start { display: inline-block; margin-top: 1.25rem; background: #f59e0b; color: #0f172a; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; text-decoration: none; transition: background 0.2s; font-size: 1rem; }
+        .btn-start:hover { background: #d97706; }
       </style>
     </head>
     <body>
@@ -51,7 +65,8 @@ if ($response === false) {
         <div class="status-badge">● Server Offline</div>
         <h1>🐔 Chicken-Agent Dev Server</h1>
         <p>Server web Python Chicken-Agent belum aktif di port <code>5173</code>.</p>
-        <p>Jalankan server melalui tombol <b>Start dev</b> di dashboard EnvKit atau double click <code>start_web.bat</code> di folder proyek.</p>
+        <a href="/?start_server=1" class="btn-start" onclick="this.innerText=\'Sedang Menyalakan...\';">🚀 Nyalakan Server Sekarang</a>
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #64748b;">Atau jalankan <code>start_web.bat</code> di folder proyek.</p>
       </div>
     </body>
     </html>';
