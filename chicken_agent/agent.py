@@ -7,6 +7,7 @@ import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
+from . import supabase_db
 from . import tools
 from .config import DATA_DIR, MAX_HISTORY_TURNS, MAX_TOKENS, MAX_TOOL_ROUNDS, MODEL
 from .knowledge import format_links_response, format_workflow_response, search_knowledge
@@ -74,6 +75,11 @@ class Agent:
         return DATA_DIR / f"history_{self.mode}.json"
 
     def _load_history(self):
+        if supabase_db.is_enabled():
+            cloud_history = supabase_db.load_history(self.mode)
+            if cloud_history is not None:
+                return cloud_history
+
         if self._history_file.exists():
             try:
                 return json.loads(self._history_file.read_text(encoding="utf-8"))
@@ -90,12 +96,23 @@ class Agent:
                 text = "".join(getattr(b, "text", "") for b in m["content"] if getattr(b, "type", "") == "text")
                 if text:
                     plain.append({"role": "assistant", "content": text})
-        self._history_file.write_text(
-            json.dumps(plain[-MAX_HISTORY_TURNS:], ensure_ascii=False, indent=2), encoding="utf-8"
-        )
+
+        # Simpan ke Supabase Cloud jika aktif
+        saved_cloud = False
+        if supabase_db.is_enabled():
+            saved_cloud = supabase_db.save_history(self.mode, plain)
+
+        # Jika opsi simpan cloud aktif penuh, hindari menulis data ke disk laptop
+        use_cloud_only = os.getenv("USE_SUPABASE_STORAGE", "false").lower() == "true"
+        if not (use_cloud_only and saved_cloud):
+            self._history_file.write_text(
+                json.dumps(plain[-MAX_HISTORY_TURNS:], ensure_ascii=False, indent=2), encoding="utf-8"
+            )
 
     def reset(self):
         self.messages = []
+        if supabase_db.is_enabled():
+            supabase_db.reset_history(self.mode)
         self._history_file.unlink(missing_ok=True)
 
     # ----- eksekusi tool -----

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .config import DATA_DIR, WORKSPACE_DIR
 from .knowledge import format_links_response, format_workflow_response, search_knowledge
+from . import supabase_db
 
 TASKS_FILE = DATA_DIR / "tasks.json"
 NOTES_FILE = DATA_DIR / "notes.json"
@@ -40,6 +41,11 @@ def get_current_time() -> str:
 
 
 def add_task(title: str, due: str = "") -> str:
+    if supabase_db.is_enabled():
+        res = supabase_db.add_task(title, due)
+        if res:
+            return f"Tugas #{res['id']} ditambahkan ke Supabase Cloud: {title}"
+
     tasks = _load(TASKS_FILE)
     new_id = max([t["id"] for t in tasks], default=0) + 1
     tasks.append({"id": new_id, "title": title, "due": due, "done": False})
@@ -48,6 +54,16 @@ def add_task(title: str, due: str = "") -> str:
 
 
 def list_tasks(only_open: bool = True) -> str:
+    if supabase_db.is_enabled():
+        tasks = supabase_db.list_tasks(only_open=only_open)
+        if tasks is not None:
+            if not tasks:
+                return "Tidak ada tugas di Supabase Cloud."
+            return "\n".join(
+                f"#{t['id']} [{'x' if t.get('done') else ' '}] {t['title']} (Cloud)"
+                for t in tasks
+            )
+
     tasks = _load(TASKS_FILE)
     if only_open:
         tasks = [t for t in tasks if not t["done"]]
@@ -55,12 +71,17 @@ def list_tasks(only_open: bool = True) -> str:
         return "Tidak ada tugas."
     return "\n".join(
         f"#{t['id']} [{'x' if t['done'] else ' '}] {t['title']}"
-        + (f" (tenggat {t['due']})" if t["due"] else "")
+        + (f" (tenggat {t['due']})" if t.get("due") else "")
         for t in tasks
     )
 
 
 def complete_task(task_id: int) -> str:
+    if supabase_db.is_enabled():
+        ok = supabase_db.complete_task(task_id)
+        if ok:
+            return f"Tugas #{task_id} ditandai selesai di Supabase Cloud."
+
     tasks = _load(TASKS_FILE)
     for t in tasks:
         if t["id"] == task_id:
@@ -71,6 +92,11 @@ def complete_task(task_id: int) -> str:
 
 
 def save_note(text: str, tag: str = "") -> str:
+    if supabase_db.is_enabled():
+        ok = supabase_db.save_note(text, tag)
+        if ok:
+            return "Catatan berhasil disimpan ke Supabase Cloud."
+
     notes = _load(NOTES_FILE)
     notes.append({"time": datetime.now().isoformat(timespec="seconds"), "tag": tag, "text": text})
     _save(NOTES_FILE, notes)
@@ -78,6 +104,13 @@ def save_note(text: str, tag: str = "") -> str:
 
 
 def search_notes(query: str) -> str:
+    if supabase_db.is_enabled():
+        hits = supabase_db.search_notes(query)
+        if hits is not None:
+            if not hits:
+                return "Tidak ada catatan di Supabase Cloud yang cocok."
+            return "\n".join(f"[{h.get('created_at', '')[:19]}] ({h.get('tag', '')}) {h['text']}" for h in hits)
+
     q = query.lower()
     hits = [n for n in _load(NOTES_FILE) if q in n["text"].lower() or q in n["tag"].lower()]
     if not hits:
