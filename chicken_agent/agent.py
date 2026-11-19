@@ -227,7 +227,8 @@ class Agent:
             "model": model_name,
             "messages": chat_msgs,
             "max_tokens": MAX_TOKENS,
-            "temperature": 0.7
+            "temperature": 0.7,
+            "stream": False
         }
 
         req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST")
@@ -306,8 +307,8 @@ class Agent:
             self._save_history()
             return final_text
 
-        # 3. Jika provider adalah Gemini atau OpenAI-compatible
-        if self.provider in ("gemini", "openai"):
+        # 3. Jika provider adalah Gemini, DeepSeek, atau OpenAI-compatible
+        if self.provider in ("gemini", "openai", "deepseek"):
             return self._call_openai_compatible(user_text, on_text=on_text)
 
         # 4. Fallback ke Local Knowledge Engine (selalu bisa diakses tanpa API key)
