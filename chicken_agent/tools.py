@@ -118,6 +118,24 @@ def search_notes(query: str) -> str:
     return "\n".join(f"[{n['time']}] ({n['tag']}) {n['text']}" for n in hits[-10:])
 
 
+def web_search(query: str, max_results: int = 5) -> str:
+    """Cari informasi real-time dan berita terbaru dari internet/web."""
+    try:
+        from ddgs import DDGS
+        hits = list(DDGS().text(query, max_results=max_results))
+        if not hits:
+            return f"Tidak ditemukan hasil pencarian web untuk '{query}'."
+        out = []
+        for i, h in enumerate(hits, 1):
+            title = h.get("title", "")
+            snippet = h.get("body", "")
+            url = h.get("href", "")
+            out.append(f"{i}. **{title}**\n   {snippet}\n   Sumber: {url}")
+        return "\n\n".join(out)
+    except Exception as e:
+        return f"Gagal melakukan pencarian web: {e}"
+
+
 def list_files(subdir: str = ".") -> str:
     base = _safe_path(subdir)
     if not base.exists():
@@ -252,6 +270,7 @@ TOOLS = {
                              {"query": S}, ["query"]), search_links),
     "check_render_status": (_schema("check_render_status", "Cek koneksi dan status akun hosting Render."), check_render_status),
     "check_supabase_status": (_schema("check_supabase_status", "Cek koneksi dan project database Supabase."), check_supabase_status),
+    "web_search": (_schema("web_search", "Cari informasi real-time dan berita terbaru di internet.", {"query": S}, ["query"]), web_search),
 }
 
 # Tool yang dieksekusi server Anthropic (tidak perlu kode lokal)

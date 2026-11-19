@@ -221,7 +221,24 @@ class Agent:
         for m in self.messages[-10:]:
             if isinstance(m.get("content"), str):
                 chat_msgs.append({"role": m["role"], "content": m["content"]})
-        chat_msgs.append({"role": "user", "content": user_text})
+
+        # Real-time Web Search Grounding: ambil info internet terbaru jika query meminta data terkini
+        t_low = user_text.lower()
+        needs_web = any(k in t_low for k in ["cari tahu", "cari di web", "web search", "berita", "terbaru", "terkini", "2026", "2025", "hari ini", "sekarang", "perkembangan"])
+        if needs_web:
+            clean_q = user_text
+            for prefix in ["cari tahu tentang", "cari tahu", "cari di web", "web search", "tolong"]:
+                clean_q = clean_q.replace(prefix, "")
+            clean_q = clean_q.strip() or user_text
+            web_results = tools.web_search(clean_q, max_results=3)
+            if web_results and not web_results.startswith("Gagal") and not web_results.startswith("Tidak ditemukan"):
+                user_prompt = f"{user_text}\n\n[Informasi Hasil Web Search Terkini]:\n{web_results}\n\n(Instruksi: Gunakan data pencarian web real-time di atas untuk menjawab secara ramah, lengkap, dan mutakhir)."
+            else:
+                user_prompt = user_text
+        else:
+            user_prompt = user_text
+
+        chat_msgs.append({"role": "user", "content": user_prompt})
 
         payload = {
             "model": model_name,
@@ -233,7 +250,7 @@ class Agent:
 
         req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST")
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with urllib.request.urlopen(req, timeout=90) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
                 reply = data["choices"][0]["message"]["content"]
                 on_text(reply)
